@@ -1,0 +1,36 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+venv/
+env/
+ENV/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Credentials and sensitive files
+*.env
+.env
+credentials.json
+config/credentials.py
+
+# Output files
+*.csv
+*.json
+output/
+data/*.csv
+data/*.json
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Project specific
+*.log
+.DS_Store
