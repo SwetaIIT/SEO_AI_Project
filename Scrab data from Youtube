@@ -1,0 +1,265 @@
+{
+  "nbformat": 4,
+  "nbformat_minor": 0,
+  "metadata": {
+    "colab": {
+      "provenance": [],
+      "toc_visible": true,
+      "authorship_tag": "ABX9TyOZRSLHw4BRoerlsOp3W9Lt",
+      "include_colab_link": true
+    },
+    "kernelspec": {
+      "name": "python3",
+      "display_name": "Python 3"
+    },
+    "language_info": {
+      "name": "python"
+    }
+  },
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "view-in-github",
+        "colab_type": "text"
+      },
+      "source": [
+        "<a href=\"https://colab.research.google.com/github/SwetaIIT/SEO_AI_Project/blob/file/Scrab%20data%20from%20Youtube\" target=\"_parent\"><img src=\"https://colab.research.google.com/assets/colab-badge.svg\" alt=\"Open In Colab\"/></a>"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "pip install supadata"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "WNbI1KOyt3PK",
+        "outputId": "50e649c5-50dd-44e9-c8ff-781c820e5226"
+      },
+      "execution_count": 4,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Collecting supadata\n",
+            "  Downloading supadata-1.6.0-py3-none-any.whl.metadata (7.9 kB)\n",
+            "Requirement already satisfied: requests>=2.28.1 in /usr/local/lib/python3.12/dist-packages (from supadata) (2.32.4)\n",
+            "Requirement already satisfied: charset_normalizer<4,>=2 in /usr/local/lib/python3.12/dist-packages (from requests>=2.28.1->supadata) (3.4.7)\n",
+            "Requirement already satisfied: idna<4,>=2.5 in /usr/local/lib/python3.12/dist-packages (from requests>=2.28.1->supadata) (3.11)\n",
+            "Requirement already satisfied: urllib3<3,>=1.21.1 in /usr/local/lib/python3.12/dist-packages (from requests>=2.28.1->supadata) (2.5.0)\n",
+            "Requirement already satisfied: certifi>=2017.4.17 in /usr/local/lib/python3.12/dist-packages (from requests>=2.28.1->supadata) (2026.2.25)\n",
+            "Downloading supadata-1.6.0-py3-none-any.whl (17 kB)\n",
+            "Installing collected packages: supadata\n",
+            "Successfully installed supadata-1.6.0\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "import os\n",
+        "from supadata import Supadata\n",
+        "\n",
+        "# 🔑 Step 1: Add your API key\n",
+        "API_KEY = \"sd_b12f70f2c0f72ae6b7065c226eee82ae\"\n",
+        "\n",
+        "# 🔗 Step 2: Add YouTube URL\n",
+        "VIDEO_URL = \"https://youtu.be/1wWiXwbyuoQ?si=oLMzb9grUSkSL-HJ\"\n",
+        "\n",
+        "# 📁 Step 3: File path\n",
+        "OUTPUT_PATH = \"research/youtube-transcripts/video1.txt\"\n",
+        "\n",
+        "# 🚀 Step 4: Initialize API\n",
+        "supadata = Supadata(api_key=API_KEY)\n",
+        "\n",
+        "try:\n",
+        "    # 📥 Step 5: Fetch transcript\n",
+        "    result = supadata.transcript(\n",
+        "        url=VIDEO_URL,\n",
+        "        lang=\"en\"\n",
+        "    )\n",
+        "\n",
+        "    # 🧠 Step 6: Extract text safely\n",
+        "    transcript = \"\\n\".join([\n",
+        "        item.text if hasattr(item, \"text\") else item[\"text\"]\n",
+        "        for item in result.content\n",
+        "    ])\n",
+        "\n",
+        "    # 📂 Step 7: Create folder if not exists\n",
+        "    os.makedirs(os.path.dirname(OUTPUT_PATH), exist_ok=True)\n",
+        "\n",
+        "    # 💾 Step 8: Save to file\n",
+        "    with open(OUTPUT_PATH, \"w\", encoding=\"utf-8\") as f:\n",
+        "        f.write(transcript)\n",
+        "\n",
+        "    print(\"✅ Transcript saved successfully!\")\n",
+        "    print(f\"📁 Location: {OUTPUT_PATH}\")\n",
+        "\n",
+        "except Exception as e:\n",
+        "    print(\"❌ Error occurred:\")\n",
+        "    print(e)"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "AshKd34JvBGZ",
+        "outputId": "a4e6b301-b91d-41bd-8261-e355afc32e34"
+      },
+      "execution_count": 7,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "✅ Transcript saved successfully!\n",
+            "📁 Location: research/youtube-transcripts/video1.txt\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "import os\n",
+        "\n",
+        "# 📂 Input file\n",
+        "INPUT_PATH = \"research/youtube-transcripts/video1.txt\"\n",
+        "\n",
+        "# 📂 Output file\n",
+        "OUTPUT_PATH = \"research/insights/video1.txt\"\n",
+        "\n",
+        "# 🧠 Read transcript\n",
+        "with open(INPUT_PATH, \"r\", encoding=\"utf-8\") as f:\n",
+        "    transcript = f.read()\n",
+        "\n",
+        "# ✨ Prompt (VERY IMPORTANT)\n",
+        "prompt = f\"\"\"\n",
+        "You are an expert content strategist.\n",
+        "\n",
+        "From the below transcript, extract:\n",
+        "\n",
+        "1. 5 key insights\n",
+        "2. 3 actionable strategies\n",
+        "3. 3 content ideas for LinkedIn\n",
+        "\n",
+        "Transcript:\n",
+        "{transcript}\n",
+        "\"\"\"\n",
+        "\n",
+        "# ⚠️ For now (no API), just save prompt\n",
+        "os.makedirs(os.path.dirname(OUTPUT_PATH), exist_ok=True)\n",
+        "\n",
+        "with open(OUTPUT_PATH, \"w\", encoding=\"utf-8\") as f:\n",
+        "    f.write(prompt)\n",
+        "\n",
+        "print(\"✅ Insight prompt saved!\")"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "hpaR3dhxvsdB",
+        "outputId": "7cc552c1-ac7e-4e93-f42d-ceec4ce5b540"
+      },
+      "execution_count": 9,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "✅ Insight prompt saved!\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "from google.colab import files\n",
+        "\n",
+        "files.download(\"research/youtube-transcripts/video1.txt\")"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 17
+        },
+        "id": "lqnwIs1vwh02",
+        "outputId": "1a4ba45c-a50a-42b4-cebb-617f72da4761"
+      },
+      "execution_count": 10,
+      "outputs": [
+        {
+          "output_type": "display_data",
+          "data": {
+            "text/plain": [
+              "<IPython.core.display.Javascript object>"
+            ],
+            "application/javascript": [
+              "\n",
+              "    async function download(id, filename, size) {\n",
+              "      if (!google.colab.kernel.accessAllowed) {\n",
+              "        return;\n",
+              "      }\n",
+              "      const div = document.createElement('div');\n",
+              "      const label = document.createElement('label');\n",
+              "      label.textContent = `Downloading \"${filename}\": `;\n",
+              "      div.appendChild(label);\n",
+              "      const progress = document.createElement('progress');\n",
+              "      progress.max = size;\n",
+              "      div.appendChild(progress);\n",
+              "      document.body.appendChild(div);\n",
+              "\n",
+              "      const buffers = [];\n",
+              "      let downloaded = 0;\n",
+              "\n",
+              "      const channel = await google.colab.kernel.comms.open(id);\n",
+              "      // Send a message to notify the kernel that we're ready.\n",
+              "      channel.send({})\n",
+              "\n",
+              "      for await (const message of channel.messages) {\n",
+              "        // Send a message to notify the kernel that we're ready.\n",
+              "        channel.send({})\n",
+              "        if (message.buffers) {\n",
+              "          for (const buffer of message.buffers) {\n",
+              "            buffers.push(buffer);\n",
+              "            downloaded += buffer.byteLength;\n",
+              "            progress.value = downloaded;\n",
+              "          }\n",
+              "        }\n",
+              "      }\n",
+              "      const blob = new Blob(buffers, {type: 'application/binary'});\n",
+              "      const a = document.createElement('a');\n",
+              "      a.href = window.URL.createObjectURL(blob);\n",
+              "      a.download = filename;\n",
+              "      div.appendChild(a);\n",
+              "      a.click();\n",
+              "      div.remove();\n",
+              "    }\n",
+              "  "
+            ]
+          },
+          "metadata": {}
+        },
+        {
+          "output_type": "display_data",
+          "data": {
+            "text/plain": [
+              "<IPython.core.display.Javascript object>"
+            ],
+            "application/javascript": [
+              "download(\"download_9f4c0fb6-22a9-4ed3-8442-7df3a0179658\", \"video1.txt\", 10545)"
+            ]
+          },
+          "metadata": {}
+        }
+      ]
+    }
+  ]
+}
